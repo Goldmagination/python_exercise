@@ -43,7 +43,8 @@ def register_user():
 @auth.login_required
 def get_messages():
     user = auth.current_user()
-    messages = Message.query.filter_by(user_id=user.id).all()
+    # This limitation could be extended to filter by the datetime when the message was published.
+    messages = Message.query.filter_by(user_id=user.id).limit(200).all()
     return jsonify([dict(message.to_dto()) for message in messages])
 
 @main.route('/messages/<string:message_id>', methods=['GET'])
